@@ -1,0 +1,4 @@
+# CPSC410
+UBC CPSC 410 2018W1
+
+Repo for CPSC 410 Projects.
