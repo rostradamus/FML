@@ -1,4 +1,4 @@
-package model;
+package model.action;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
