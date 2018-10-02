@@ -1,13 +1,11 @@
 package model;
 
+import libs.Node;
+
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
-public class Folder extends FileSystemElement{
-    List<FileSystemElement> fsElements;
-
-
+public class Statement extends Node {
     @Override
     public void parse() {
 
@@ -17,3 +15,5 @@ public class Folder extends FileSystemElement{
     public void evaluate() throws FileNotFoundException, UnsupportedEncodingException {
     }
 }
+
+

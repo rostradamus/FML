@@ -2,11 +2,8 @@ package model;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
-public class Folder extends FileSystemElement{
-    List<FileSystemElement> fsElements;
-
+public class FileSystemElement extends Statement{
 
     @Override
     public void parse() {
