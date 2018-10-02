@@ -1,4 +1,4 @@
-package model;
+package model.action;
 
 import model.action.Action;
 
