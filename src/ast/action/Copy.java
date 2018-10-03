@@ -1,10 +1,9 @@
-package model;
+package ast.action;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
-public class File extends FileSystemElement{
-
+public class Copy extends Action{
     @Override
     public void parse() {
 
@@ -12,5 +11,6 @@ public class File extends FileSystemElement{
 
     @Override
     public void evaluate() throws FileNotFoundException, UnsupportedEncodingException {
+
     }
 }
