@@ -1,6 +1,6 @@
-package model.action;
+package ast.action;
 
-import model.Statement;
+import ast.Statement;
 
 public abstract class Action extends Statement {
 }

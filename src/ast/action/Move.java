@@ -1,9 +1,9 @@
-package model.action;
+package ast.action;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
-public class Show extends Action{
+public class Move extends Action{
     @Override
     public void parse() {
 

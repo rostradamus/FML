@@ -1,9 +1,10 @@
-package model.action;
+package ast;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
-public class Delete extends Action{
+public class File extends FileSystemElement{
+
     @Override
     public void parse() {
 
@@ -11,6 +12,5 @@ public class Delete extends Action{
 
     @Override
     public void evaluate() throws FileNotFoundException, UnsupportedEncodingException {
-
     }
 }
