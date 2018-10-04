@@ -1,0 +1,2 @@
+show file called Hello.txt
+show file called .zshrc
