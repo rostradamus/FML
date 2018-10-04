@@ -10,7 +10,7 @@ public class Copy extends Action{
     }
 
     @Override
-    public void evaluate() throws FileNotFoundException, UnsupportedEncodingException {
-
+    public Object evaluate() throws FileNotFoundException, UnsupportedEncodingException {
+        return null;
     }
 }

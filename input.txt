@@ -1,2 +1,2 @@
-show file called Hello.txt
-show file called .zshrc
+show file hello.txt in folder /Users/rolee
+show folder /Users/rolee/temp

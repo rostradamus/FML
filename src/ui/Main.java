@@ -18,7 +18,7 @@ public class Main {
 //        cpr.run();
 
         System.out.println("=============== DSL POC ===============");
-        List<String> literals = Arrays.asList("show", "find", "called");
+        List<String> literals = Arrays.asList("show", "find", "file", "folder", "in");
         Tokenizer.makeTokenizer("input.txt", literals);
         Program p = new Program();
         p.parse();

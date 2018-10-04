@@ -20,6 +20,8 @@ public class Program extends Node {
                 s = new Show();
             } else if (tokenizer.checkToken("find")) {
                 s = new Find();
+            } else if (tokenizer.checkToken("file")) {
+                s = new File();
             } else {
                 System.out.println("Fuck !");
             }
@@ -29,9 +31,10 @@ public class Program extends Node {
     }
 
     @Override
-    public void evaluate() throws FileSystemNotSupportedException, FileNotFoundException, UnsupportedEncodingException {
+    public Object evaluate() throws FileSystemNotSupportedException, FileNotFoundException, UnsupportedEncodingException {
         for (Statement s : statements) {
             s.evaluate();
         }
+        return null;
     }
 }

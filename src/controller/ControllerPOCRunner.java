@@ -2,18 +2,18 @@ package controller;
 
 import controller.exception.FileSystemNotSupportedException;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class ControllerPOCRunner {
     public void run() {
         FileSystemController fileSystemController = FileSystemController.getInstance();
         try {
             String home = System.getProperty("user.home");
-
+            Path src;
             printDescription("show", true);
-            fileSystemController.show("hello.txt");
-
-            // USE BELOW function for absolute path
-            printDescription("show", false);
-            fileSystemController.show("hello.txt", home);
+            src = Paths.get(home,"hello.txt");
+            fileSystemController.show(src);
 
             printDescription("find", true);
             fileSystemController.find("random");
@@ -27,7 +27,6 @@ public class ControllerPOCRunner {
 
     private void printDescription(String method, boolean isCurrentPath) {
         String pathDescription = " (with " + (isCurrentPath ? "current" : "absolute") + " path)";
-
         System.out.println("================== " + method + pathDescription + " ==================");
     }
 }

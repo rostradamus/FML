@@ -1,5 +1,9 @@
 package ast.action;
 
+import ast.File;
+import ast.FileSystemElement;
+import ast.Folder;
+import ast.Statement;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
 
@@ -7,18 +11,18 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
 public class Show extends Action {
-    String kind;
-    String name;
+    FileSystemElement src;
     @Override
     public void parse() {
         tokenizer.getAndCheckNext("show");
-        kind = tokenizer.getNext();
-        tokenizer.getAndCheckNext("called");
-        name = tokenizer.getNext().trim();
+        src = new FileSystemElement();
+        src.parse();
     }
 
     @Override
-    public void evaluate() throws FileSystemNotSupportedException, FileNotFoundException, UnsupportedEncodingException {
-        FileSystemController.getInstance().show(name);
+    public Object evaluate() throws FileSystemNotSupportedException, FileNotFoundException, UnsupportedEncodingException {
+
+        FileSystemController.getInstance().show(src.evaluate());
+        return null;
     }
 }

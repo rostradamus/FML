@@ -25,6 +25,23 @@ public class FileSystemController {
         return instance;
     }
 
+    public Path getFilePath(String name, Path dirPath) throws FileSystemNotSupportedException {
+        Path filePath = Paths.get(dirPath.toString(), name);
+        if (!filePath.toFile().isFile())
+            throw new FileSystemNotSupportedException(name + " in " + dirPath.toString() + " is not a file");
+        System.out.println("Found a file: " + name + ", from " + dirPath.toString());
+        return filePath;
+    }
+
+    public Path getDirectoryPath(String path) throws FileSystemNotSupportedException {
+
+        Path dirPath = Paths.get(path);
+        if (!dirPath.toFile().isDirectory())
+            throw new FileSystemNotSupportedException(path + " is not a directory.");
+        System.out.println("Found a folder: " + path);
+        return dirPath;
+    }
+
     public void setDepthOption(int customDepth) throws FileSystemNotSupportedException {
         if (customDepth > 10)
             throw new FileSystemNotSupportedException("File system service do not support depth deeper than 10");
@@ -64,25 +81,34 @@ public class FileSystemController {
     }
 
     // TODO: Below methods are POC codes
-    public boolean show(String name) throws FileSystemNotSupportedException {
-        return show(name, currPath);
+    public void show(Path path) throws FileSystemNotSupportedException {
+        boolean isPathFile = path.toFile().isFile();
+        if (isPathFile) {
+            getFileContent(path);
+        } else {
+            getFileList(path);
+        }
     }
 
-    public boolean show(String name, String path) throws FileSystemNotSupportedException {
-        Path src = Paths.get(path + "/" + name);
-        getFileContent(src).forEach(System.out::println);
-
-        return false;
-    }
-
-    private List<String> getFileContent(Path src) throws FileSystemNotSupportedException {
+    private void getFileContent(Path src) throws FileSystemNotSupportedException {
+        System.out.println("=============== Show file content for " + src.toString() + " ===============");
         List<String> lines;
         try {
             lines = Files.readAllLines(src);
         } catch (IOException e) {
             throw new FileSystemNotSupportedException(e.getMessage());
         }
-        return lines;
+        lines.forEach(System.out::println);
+        System.out.println("=============== End of file content for ===============");
+    }
+
+    private void getFileList(Path src) throws FileSystemNotSupportedException {
+        System.out.println("=============== Show file list for " + src.toString() + " ===============");
+        File[] files = src.toFile().listFiles();
+        Arrays.asList(files).forEach((file -> {
+            System.out.println(file.getName());
+        }));
+        System.out.println("=============== End of file list for ===============");
     }
 
     private Stream<Path> findFiles(String name, Path start) throws FileSystemNotSupportedException {

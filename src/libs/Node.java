@@ -12,7 +12,7 @@ public abstract class Node {
     static protected PrintWriter writer;
 
     abstract public void parse();
-    abstract public void evaluate() throws FileNotFoundException, UnsupportedEncodingException, FileSystemNotSupportedException;
+    abstract public Object evaluate() throws FileNotFoundException, UnsupportedEncodingException, FileSystemNotSupportedException;
 
 
 }
