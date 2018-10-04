@@ -1,6 +1,8 @@
 package libs;
 
 
+import controller.exception.FileSystemNotSupportedException;
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -10,7 +12,7 @@ public abstract class Node {
     static protected PrintWriter writer;
 
     abstract public void parse();
-    abstract public void evaluate() throws FileNotFoundException, UnsupportedEncodingException;
+    abstract public void evaluate() throws FileNotFoundException, UnsupportedEncodingException, FileSystemNotSupportedException;
 
 
 }

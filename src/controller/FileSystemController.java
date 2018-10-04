@@ -70,7 +70,6 @@ public class FileSystemController {
 
     public boolean show(String name, String path) throws FileSystemNotSupportedException {
         Path src = Paths.get(path + "/" + name);
-        System.out.println(src.toString());
         getFileContent(src).forEach(System.out::println);
 
         return false;
