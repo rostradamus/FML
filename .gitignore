@@ -5,4 +5,4 @@
 *.ipr
 /**/.DS_store
 out
-**/input.txt
+input.txt
