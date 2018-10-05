@@ -21,7 +21,6 @@ public class Show extends Action {
 
     @Override
     public Object evaluate() throws FileSystemNotSupportedException, FileNotFoundException, UnsupportedEncodingException {
-
         FileSystemController.getInstance().show(src.evaluate());
         return null;
     }

@@ -34,7 +34,6 @@ public class FileSystemController {
     }
 
     public Path getDirectoryPath(String path) throws FileSystemNotSupportedException {
-
         Path dirPath = Paths.get(path);
         if (!dirPath.toFile().isDirectory())
             throw new FileSystemNotSupportedException(path + " is not a directory.");
@@ -72,7 +71,15 @@ public class FileSystemController {
         return false;
     }
 
-    public boolean move() {
+    public boolean move(Path src, Path dst) {
+        try {
+            Path extendedDst = this.extendDirectoryPath(src, dst);
+            Files.move(src, extendedDst);
+            System.out.println("moved " + src.toString() + " to " + extendedDst.toString());
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -122,5 +129,11 @@ public class FileSystemController {
             throw new FileSystemNotSupportedException(e.getMessage());
         }
         return stream;
+    }
+
+    private Path extendDirectoryPath(Path src, Path dst) {
+        String[] srcPath = src.toString().split("/");
+        Path pp = Paths.get(dst.toString(), srcPath[srcPath.length - 1]);
+        return pp;
     }
 }
