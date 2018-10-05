@@ -22,7 +22,12 @@ public class Program extends Node {
                 s = new Find();
             } else if (tokenizer.checkToken("file")) {
                 s = new File();
-            } else {
+            } else if (tokenizer.checkToken("move")){
+                s = new Move();
+            } else if (tokenizer.checkToken("copy")) {
+                s = new Copy();
+            }else
+             {
                 System.out.println("Fuck !");
             }
             s.parse();
