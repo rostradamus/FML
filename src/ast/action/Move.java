@@ -13,11 +13,16 @@ public class Move extends Action{
     @Override
     public void parse() {
         tokenizer.getAndCheckNext("move");
-        src = new FileSystemElement();
-        src.parse();
-        tokenizer.getAndCheckNext("to");
-        dst = new Folder();
-        dst.parse();
+        if (tokenizer.checkToken("get")) {
+            //TODO: later when we finish SET action
+        } else {
+            src = new FileSystemElement();
+            src.parse();
+            tokenizer.getAndCheckNext("to");
+            dst = new Folder();
+            dst.parse();
+        }
+
     }
 
     @Override
