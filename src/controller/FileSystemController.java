@@ -2,10 +2,12 @@ package controller;
 
 import controller.exception.FileSystemNotSupportedException;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class FileSystemController {
@@ -47,9 +49,6 @@ public class FileSystemController {
         this.depthOption = customDepth;
     }
 
-    public boolean copy() {
-        return false;
-    }
 
     public boolean create() {
 
@@ -78,6 +77,18 @@ public class FileSystemController {
             System.out.println("moved " + src.toString() + " to " + extendedDst.toString());
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean copy(Path src, Path dest)  {
+        try {
+            Path copiedPath = dest.resolve(src.getFileName());
+            Files.copy(src, copiedPath);
+            System.out.println("copied "+ src.getFileName() + " to " + copiedPath.toString());
+            return true;
+        } catch (IOException e ){
             e.printStackTrace();
         }
         return false;

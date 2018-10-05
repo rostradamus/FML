@@ -2,6 +2,8 @@ package ast.action;
 
 import ast.FileSystemElement;
 import ast.Folder;
+import controller.FileSystemController;
+import controller.exception.FileSystemNotSupportedException;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -27,7 +29,8 @@ public class Copy extends Action{
     }
 
     @Override
-    public Object evaluate() throws FileNotFoundException, UnsupportedEncodingException {
+    public Object evaluate() throws FileNotFoundException, UnsupportedEncodingException, FileSystemNotSupportedException {
+        FileSystemController.getInstance().copy(src.evaluate(), dst.evaluate());
         return null;
     }
 }
