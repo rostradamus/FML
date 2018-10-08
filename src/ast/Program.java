@@ -1,6 +1,7 @@
 package ast;
 
 import ast.action.*;
+import ast.exception.ASTNodeException;
 import controller.exception.FileSystemNotSupportedException;
 import libs.Node;
 
@@ -13,7 +14,7 @@ public class Program extends Node {
     private List<Statement> statements = new ArrayList<>();
 
     @Override
-    public void parse() {
+    public void parse() throws ASTNodeException {
         while (tokenizer.moreTokens()) {
             Statement s = null;
             if (tokenizer.checkToken("show")) {
@@ -22,8 +23,10 @@ public class Program extends Node {
                 s = new Find();
             } else if (tokenizer.checkToken("file")) {
                 s = new File();
+            } else if (tokenizer.checkToken("folder")) {
+                s = new Folder();
             } else {
-                System.out.println("Fuck !");
+                throw new ASTNodeException("Cannot find literal: " + tokenizer.getNext());
             }
             s.parse();
             statements.add(s);

@@ -26,6 +26,11 @@ public class Tokenizer {
         }
         tokenize();
     }
+    private Tokenizer(String line, List<String> literalsList, boolean isCli) {
+        literals = literalsList;
+        program = line;
+        tokenize();
+    }
 
     private void tokenize (){
         String tokenizedProgram = program;
@@ -87,6 +92,10 @@ public class Tokenizer {
         if (theTokenizer==null){
             theTokenizer = new Tokenizer(filename,literals);
         }
+    }
+
+    public static void makeCliTokenizer(String line, List<String> literals) {
+        theTokenizer = new Tokenizer(line, literals, true);
     }
 
     public static Tokenizer getTokenizer(){

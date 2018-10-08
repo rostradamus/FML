@@ -6,7 +6,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ControllerPOCRunner {
-    public void run() {
+    public static void main(String[] args) {
+        (new ControllerPOCRunner()).run();
+    }
+
+    private void run() {
         FileSystemController fileSystemController = FileSystemController.getInstance();
         try {
             String home = System.getProperty("user.home");
