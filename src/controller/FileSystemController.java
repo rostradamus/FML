@@ -2,10 +2,12 @@ package controller;
 
 import controller.exception.FileSystemNotSupportedException;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class FileSystemController {
@@ -34,7 +36,6 @@ public class FileSystemController {
     }
 
     public Path getDirectoryPath(String path) throws FileSystemNotSupportedException {
-
         Path dirPath = Paths.get(path);
         if (!dirPath.toFile().isDirectory())
             throw new FileSystemNotSupportedException(path + " is not a directory.");
@@ -48,16 +49,22 @@ public class FileSystemController {
         this.depthOption = customDepth;
     }
 
-    public boolean copy() {
-        return false;
-    }
 
     public boolean create() {
 
         return false;
     }
 
-    public boolean delete() {
+    public boolean delete(Path src) {
+        try {
+            Files.deleteIfExists(src);
+            System.out.println("File "+ src.getFileName().toString() + " deleted from " + src.getParent().toString());
+            return true;
+        } catch (DirectoryNotEmptyException e){
+            System.out.println("Directory " + src.toString() + "is not empty");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -72,7 +79,29 @@ public class FileSystemController {
         return false;
     }
 
-    public boolean move() {
+    public boolean move(Path src, Path dst) {
+        try {
+            Path extendedDst = this.extendDirectoryPath(src, dst);
+            Files.move(src, extendedDst);
+            System.out.println("moved " + src.toString() + " to " + extendedDst.toString());
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean copy(Path src, Path dest)  {
+        Path copiedPath = dest.resolve(src.getFileName());
+        try {
+            Files.copy(src, copiedPath);
+            System.out.println("File " + src.getFileName().toString() + " copied to " + copiedPath.getParent().toString());
+            return true;
+        } catch (FileAlreadyExistsException e) {
+            System.out.println("File " + src.getFileName().toString() + " already exists in " + copiedPath.getParent().toString());
+        }  catch (IOException e ){
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -122,5 +151,11 @@ public class FileSystemController {
             throw new FileSystemNotSupportedException(e.getMessage());
         }
         return stream;
+    }
+
+    private Path extendDirectoryPath(Path src, Path dst) {
+        String[] srcPath = src.toString().split("/");
+        Path pp = Paths.get(dst.toString(), srcPath[srcPath.length - 1]);
+        return pp;
     }
 }

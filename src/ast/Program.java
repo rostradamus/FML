@@ -25,8 +25,14 @@ public class Program extends Node {
                 s = new File();
             } else if (tokenizer.checkToken("folder")) {
                 s = new Folder();
-            } else {
-                throw new ASTNodeException("Cannot find literal: " + tokenizer.getNext());
+            } else if (tokenizer.checkToken("move")){
+                s = new Move();
+            } else if (tokenizer.checkToken("copy")) {
+                s = new Copy();
+            } else if (tokenizer.checkToken("delete")){
+                s = new Delete();
+            }else {
+                System.out.println("Program parse: did not run into given literals");
             }
             s.parse();
             statements.add(s);

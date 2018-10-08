@@ -1,2 +1,0 @@
-show file hello.txt in folder /Users/rolee
-show folder /Users/rolee/temp
