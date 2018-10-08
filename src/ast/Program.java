@@ -26,6 +26,8 @@ public class Program extends Node {
                 s = new Move();
             } else if (tokenizer.checkToken("copy")) {
                 s = new Copy();
+            } else if (tokenizer.checkToken("delete")){
+                s = new Delete();
             }else {
                 System.out.println("Program parse: did not run into given literals");
             }

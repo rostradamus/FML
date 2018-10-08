@@ -55,7 +55,16 @@ public class FileSystemController {
         return false;
     }
 
-    public boolean delete() {
+    public boolean delete(Path src) {
+        try {
+            Files.deleteIfExists(src);
+            System.out.println("File "+ src.getFileName().toString() + " deleted from " + src.getParent().toString());
+            return true;
+        } catch (DirectoryNotEmptyException e){
+            System.out.println("Directory " + src.toString() + "is not empty");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -83,12 +92,14 @@ public class FileSystemController {
     }
 
     public boolean copy(Path src, Path dest)  {
+        Path copiedPath = dest.resolve(src.getFileName());
         try {
-            Path copiedPath = dest.resolve(src.getFileName());
             Files.copy(src, copiedPath);
-            System.out.println("copied "+ src.getFileName() + " to " + copiedPath.toString());
+            System.out.println("File " + src.getFileName().toString() + " copied to " + copiedPath.getParent().toString());
             return true;
-        } catch (IOException e ){
+        } catch (FileAlreadyExistsException e) {
+            System.out.println("File " + src.getFileName().toString() + " already exists in " + copiedPath.getParent().toString());
+        }  catch (IOException e ){
             e.printStackTrace();
         }
         return false;
