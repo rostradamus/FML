@@ -91,7 +91,12 @@ public class FileSystemController {
 
     public boolean find(String name, String path) throws FileSystemNotSupportedException {
         Path start = Paths.get(path);
-        findFiles(name, start).forEach(System.out::println);
+        boolean isPathFile = start.toFile().isFile();
+        if (isPathFile) {
+            findFiles(name, start).forEach(System.out::println);
+        } else {
+            find(name);
+        }
 
         return false;
     }

@@ -34,6 +34,8 @@ public class Program extends Node {
                 s = new Delete();
             } else if (tokenizer.checkToken("create")) {
                 s = new Create();
+            } else if (tokenizer.checkToken("rename")) {
+                s = new Rename();
             } else {
                 System.out.println("Program parse: did not run into given literals");
             }
