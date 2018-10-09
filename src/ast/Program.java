@@ -6,6 +6,7 @@ import controller.exception.FileSystemNotSupportedException;
 import libs.Node;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,9 @@ public class Program extends Node {
                 s = new Copy();
             } else if (tokenizer.checkToken("delete")){
                 s = new Delete();
-            }else {
+            } else if (tokenizer.checkToken("create")) {
+                s = new Create();
+            } else {
                 System.out.println("Program parse: did not run into given literals");
             }
             s.parse();
@@ -42,7 +45,11 @@ public class Program extends Node {
     @Override
     public Object evaluate() throws FileSystemNotSupportedException, FileNotFoundException, UnsupportedEncodingException {
         for (Statement s : statements) {
-            s.evaluate();
+            try {
+                s.evaluate();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

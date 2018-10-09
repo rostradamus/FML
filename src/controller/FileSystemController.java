@@ -6,6 +6,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.nio.file.attribute.FileAttribute;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Stream;
@@ -35,6 +36,12 @@ public class FileSystemController {
         return filePath;
     }
 
+    public Path getNewFilePath(String newFileName, Path dirPath) throws FileSystemNotSupportedException, FileAlreadyExistsException, IOException {
+        Path fileToCreatePath = dirPath.resolve(newFileName);
+        System.out.println("File to Create: " + newFileName);
+        return fileToCreatePath;
+    }
+
     public Path getDirectoryPath(String path) throws FileSystemNotSupportedException {
         Path dirPath = Paths.get(path);
         if (!dirPath.toFile().isDirectory())
@@ -50,8 +57,18 @@ public class FileSystemController {
     }
 
 
-    public boolean create() {
-
+    public boolean create(Path src) throws FileAlreadyExistsException{
+        if (Files.exists(src)) {
+            System.out.println("File not created because some file with the same name already exists!");
+            return false;
+        }
+        try {
+            Files.createFile(src);
+            System.out.println(src.getFileName() + " created to " + src.getParent().toString());
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
