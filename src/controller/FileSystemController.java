@@ -127,8 +127,13 @@ public class FileSystemController {
         return false;
     }
 
-    public boolean rename() {
-        return false;
+    public boolean rename(Path src, String rename) {
+        File file = new File(src.toString());
+        File rfile = new File(src.getParent() + rename);
+        return file.renameTo(rfile);
+
+        //src.getFileName().resolve(src.getParent() + rename);
+        //return true;
     }
 
     // TODO: Below methods are POC codes
