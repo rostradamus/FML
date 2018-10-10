@@ -23,7 +23,6 @@ public class Set extends Action{
 
     @Override
     public Object evaluate() throws FileNotFoundException, UnsupportedEncodingException, FileSystemNotSupportedException {
-//        SymbolTable.getInstance().put(name, element.evaluate());
         SymbolTable symbolTable = SymbolTable.getInstance();
         symbolTable.put(name, element.evaluate());
         return null;

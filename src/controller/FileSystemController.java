@@ -120,6 +120,7 @@ public class FileSystemController {
         try {
             Files.copy(src, copiedPath);
             System.out.println("File " + src.getFileName().toString() + " copied to " + copiedPath.getParent().toString());
+            updateSymbolTable(src, copiedPath);
             return true;
         } catch (FileAlreadyExistsException e) {
             System.out.println("File " + src.getFileName().toString() + " already exists in " + copiedPath.getParent().toString());
@@ -131,11 +132,13 @@ public class FileSystemController {
 
     public boolean rename(Path src, String rename) {
         File file = new File(src.toString());
-        File rfile = new File(src.getParent() + rename);
-        return file.renameTo(rfile);
+        String newPath = src.getParent() + "/" + rename;
+        File renamedFile = new File(newPath);
+        updateSymbolTable(src, Paths.get(newPath));
+        System.out.println("File " + src.getFileName().toString() + " renamed to " +renamedFile.getPath());
 
-        //src.getFileName().resolve(src.getParent() + rename);
-        //return true;
+        return file.renameTo(renamedFile);
+
     }
 
     // TODO: Below methods are POC codes
@@ -194,7 +197,5 @@ public class FileSystemController {
                 SymbolTable.getInstance().getTable().put(key, newPath);
             }
         }));
-        Map table = SymbolTable.getInstance().getTable();
-        table.get("x");
     }
 }

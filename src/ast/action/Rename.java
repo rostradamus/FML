@@ -18,7 +18,8 @@ public class Rename extends Action {
         tokenizer.getAndCheckNext("rename");
         src = new FileSystemElement();
         src.parse();
-        rename = tokenizer.getAndCheckNext("to");
+        tokenizer.getAndCheckNext("to");
+        rename = tokenizer.getNext();
     }
 
     @Override
