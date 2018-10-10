@@ -94,6 +94,15 @@ public class Tokenizer {
         }
     }
 
+    public String getAndCheckUnreservedNext() {
+        String next = checkNext();
+        if (literals.contains(next)) {
+            System.out.println("Can not use reserved word as a variable name.");
+            System.exit(0);
+        }
+        return getNext();
+    }
+
     public static void makeCliTokenizer(String line, List<String> literals) {
         theTokenizer = new Tokenizer(line, literals, true);
     }

@@ -16,14 +16,8 @@ public class Rename extends Action {
     @Override
     public void parse() {
         tokenizer.getAndCheckNext("rename");
-        if (tokenizer.checkToken("get")) {
-            tokenizer.getNext();
-            String name = tokenizer.getNext();
-            src = (FileSystemElement) SymbolTable.getInstance().get(name);
-        } else {
-            src = new FileSystemElement();
-            src.parse();
-        }
+        src = new FileSystemElement();
+        src.parse();
         rename = tokenizer.getAndCheckNext("to");
     }
 

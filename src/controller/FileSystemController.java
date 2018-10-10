@@ -1,6 +1,7 @@
 package controller;
 
 import controller.exception.FileSystemNotSupportedException;
+import libs.SymbolTable;
 
 import java.awt.*;
 import java.io.File;
@@ -106,6 +107,7 @@ public class FileSystemController {
             Path extendedDst = this.extendDirectoryPath(src, dst);
             Files.move(src, extendedDst);
             System.out.println("moved " + src.toString() + " to " + extendedDst.toString());
+            updateSymbolTable(src, extendedDst);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -184,5 +186,15 @@ public class FileSystemController {
         String[] srcPath = src.toString().split("/");
         Path pp = Paths.get(dst.toString(), srcPath[srcPath.length - 1]);
         return pp;
+    }
+
+    private void updateSymbolTable(Path src, Path newPath) {
+        SymbolTable.getInstance().getTable().forEach(((key, value) -> {
+            if (value.equals(src)) {
+                SymbolTable.getInstance().getTable().put(key, newPath);
+            }
+        }));
+        Map table = SymbolTable.getInstance().getTable();
+        table.get("x");
     }
 }

@@ -17,14 +17,8 @@ public class Show extends Action {
     @Override
     public void parse() throws ASTNodeException {
         tokenizer.getAndCheckNext("show");
-        if (tokenizer.checkToken("get")) {
-            tokenizer.getNext();
-            String name = tokenizer.getNext();
-            src = (FileSystemElement) SymbolTable.getInstance().get(name);
-        } else {
-            src = new FileSystemElement();
-            src.parse();
-        }
+        src = new FileSystemElement();
+        src.parse();
     }
 
     @Override
