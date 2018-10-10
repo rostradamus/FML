@@ -7,6 +7,7 @@ import ast.Statement;
 import ast.exception.ASTNodeException;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
+import libs.SymbolTable;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -16,8 +17,14 @@ public class Show extends Action {
     @Override
     public void parse() throws ASTNodeException {
         tokenizer.getAndCheckNext("show");
-        src = new FileSystemElement();
-        src.parse();
+        if (tokenizer.checkToken("get")) {
+            tokenizer.getNext();
+            String name = tokenizer.getNext();
+            src = (FileSystemElement) SymbolTable.getInstance().get(name);
+        } else {
+            src = new FileSystemElement();
+            src.parse();
+        }
     }
 
     @Override
