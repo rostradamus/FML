@@ -29,4 +29,8 @@ public class SymbolTable {
     public Object get(String s) {
         return map.get(s);
     }
+
+    public void remove(String s) {
+        map.remove(s);
+    }
 }

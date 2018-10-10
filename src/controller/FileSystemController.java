@@ -76,6 +76,7 @@ public class FileSystemController {
     public boolean delete(Path src) {
         try {
             Files.deleteIfExists(src);
+            updateSymbolTable(src, null);
             System.out.println("File "+ src.getFileName().toString() + " deleted from " + src.getParent().toString());
             return true;
         } catch (DirectoryNotEmptyException e){
@@ -191,7 +192,19 @@ public class FileSystemController {
         return pp;
     }
 
+
+    /**
+     *
+     * @param src
+     * @param newPath if it is null it will delete src mapping from symbol table.
+     */
     private void updateSymbolTable(Path src, Path newPath) {
+        if (newPath == null) {
+            SymbolTable.getInstance();
+            SymbolTable.getInstance().getTable().entrySet().removeIf(entry -> entry.getValue().equals(src));
+            SymbolTable.getInstance();
+        }
+
         SymbolTable.getInstance().getTable().forEach(((key, value) -> {
             if (value.equals(src)) {
                 SymbolTable.getInstance().getTable().put(key, newPath);
