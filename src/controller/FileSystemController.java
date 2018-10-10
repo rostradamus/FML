@@ -200,9 +200,7 @@ public class FileSystemController {
      */
     private void updateSymbolTable(Path src, Path newPath) {
         if (newPath == null) {
-            SymbolTable.getInstance();
             SymbolTable.getInstance().getTable().entrySet().removeIf(entry -> entry.getValue().equals(src));
-            SymbolTable.getInstance();
         }
 
         SymbolTable.getInstance().getTable().forEach(((key, value) -> {
