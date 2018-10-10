@@ -34,10 +34,10 @@ public class Tokenizer {
 
     private void tokenize (){
         String tokenizedProgram = program;
-        tokenizedProgram = tokenizedProgram.replace("\n","");
+        tokenizedProgram = tokenizedProgram.replace("\n"," ");
         System.out.println(program);
         for (String s : literals){
-            tokenizedProgram = tokenizedProgram.replace(s,"_"+s+"_");
+            tokenizedProgram = tokenizedProgram.replaceAll("\\b"+s+"\\b","_"+s+"_");
             System.out.println(tokenizedProgram);
         }
         tokenizedProgram = tokenizedProgram.replaceAll("[ ]+","");

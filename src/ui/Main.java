@@ -51,7 +51,7 @@ public class Main {
                 // flush previous statement
                 statement = "";
             } else {
-                statement = statement.concat(line);
+                statement = statement.concat(line + " ");
             }
         }
         System.out.println("BYE!");
