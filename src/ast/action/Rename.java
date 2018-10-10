@@ -4,6 +4,7 @@ import ast.FileSystemElement;
 import ast.Folder;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
+import libs.SymbolTable;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -15,8 +16,14 @@ public class Rename extends Action {
     @Override
     public void parse() {
         tokenizer.getAndCheckNext("rename");
-        src = new FileSystemElement();
-        src.parse();
+        if (tokenizer.checkToken("get")) {
+            tokenizer.getNext();
+            String name = tokenizer.getNext();
+            src = (FileSystemElement) SymbolTable.getInstance().get(name);
+        } else {
+            src = new FileSystemElement();
+            src.parse();
+        }
         rename = tokenizer.getAndCheckNext("to");
     }
 
