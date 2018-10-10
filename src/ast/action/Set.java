@@ -1,6 +1,7 @@
 package ast.action;
 
 import ast.FileSystemElement;
+import controller.exception.FileSystemNotSupportedException;
 import libs.SymbolTable;
 
 import java.io.FileNotFoundException;
@@ -13,7 +14,7 @@ public class Set extends Action{
     @Override
     public void parse() {
         tokenizer.getAndCheckNext("set");
-        name = tokenizer.getNext();
+        name = tokenizer.getAndCheckUnreservedNext();
         tokenizer.getAndCheckNext("as");
         element = new FileSystemElement();
         element.parse();
@@ -21,8 +22,10 @@ public class Set extends Action{
     }
 
     @Override
-    public Object evaluate() throws FileNotFoundException, UnsupportedEncodingException {
-        SymbolTable.getInstance().put(name, element);
+    public Object evaluate() throws FileNotFoundException, UnsupportedEncodingException, FileSystemNotSupportedException {
+//        SymbolTable.getInstance().put(name, element.evaluate());
+        SymbolTable symbolTable = SymbolTable.getInstance();
+        symbolTable.put(name, element.evaluate());
         return null;
     }
 }

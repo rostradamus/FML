@@ -38,6 +38,8 @@ public class Program extends Node {
                 s = new Rename();
             } else if (tokenizer.checkToken("set")) {
                 s = new Set();
+            } else if (tokenizer.checkToken("get")) {
+                s = new Alias();
             } else {
                 System.out.println("Program parse: did not run into given literals");
             }

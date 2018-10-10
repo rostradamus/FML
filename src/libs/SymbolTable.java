@@ -1,6 +1,7 @@
 package libs;
 
 import java.util.HashMap;
+import java.util.Observer;
 
 public class SymbolTable {
     private HashMap<String, Object> map;

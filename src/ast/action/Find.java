@@ -14,14 +14,8 @@ public class Find extends Action{
     @Override
     public void parse() {
         tokenizer.getAndCheckNext("find");
-        if (tokenizer.checkToken("get")) {
-            tokenizer.getNext();
-            String name = tokenizer.getNext();
-            src = (FileSystemElement) SymbolTable.getInstance().get(name);
-        } else {
-            src = new FileSystemElement();
-            src.parse();
-        }
+        src = new FileSystemElement();
+        src.parse();
     }
 
     @Override
