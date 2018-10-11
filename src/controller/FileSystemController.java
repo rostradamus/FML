@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Stream;
 
+
+
 public class FileSystemController {
     private static FileSystemController instance;
     private String currPath;
@@ -74,15 +76,21 @@ public class FileSystemController {
 
     public boolean delete(Path src) {
         try {
-            Files.deleteIfExists(src);
-            System.out.println("File "+ src.getFileName().toString() + " deleted from " + src.getParent().toString());
+            String output = Files.isDirectory(src) ? "Folder " : "File ";
+            deleteHelper(src.toFile());
+            System.out.println(output + src.getFileName().toString() + " deleted from " + src.getParent().toString());
             return true;
-        } catch (DirectoryNotEmptyException e){
-            System.out.println("Directory " + src.toString() + "is not empty");
         } catch (IOException e){
             e.printStackTrace();
         }
         return false;
+    }
+    public boolean deleteHelper(File file) throws IOException{
+            if (!file.isDirectory() && file.exists()) return file.delete();
+            for (File f : file.listFiles()) {
+                deleteHelper(f);
+            }
+            return file.delete();
     }
 
     public boolean find(String name) throws FileSystemNotSupportedException {
@@ -113,15 +121,24 @@ public class FileSystemController {
         return false;
     }
 
-    public boolean copy(Path src, Path dest)  {
-        Path copiedPath = dest.resolve(src.getFileName());
+    public boolean copy(Path src, Path dest){
+        String output = Files.isDirectory(src) ? "Folder " : "File ";
         try {
-            Files.copy(src, copiedPath);
-            System.out.println("File " + src.getFileName().toString() + " copied to " + copiedPath.getParent().toString());
-            return true;
-        } catch (FileAlreadyExistsException e) {
-            System.out.println("File " + src.getFileName().toString() + " already exists in " + copiedPath.getParent().toString());
-        }  catch (IOException e ){
+            Path newFolder = dest.resolve(src.getFileName());
+            Files.copy(src, newFolder);
+            Files.walk(src).forEach( s -> {
+                try {
+                    Path d = newFolder.resolve(src.relativize(s));
+                    if(Files.exists(d)) return;
+                    Files.copy(s, d);
+                } catch( Exception e ) {
+                    e.printStackTrace();
+                }
+            });
+            System.out.println(output + src.getFileName().toString() + " copied to " + dest.toString());
+        } catch(FileAlreadyExistsException ex ) {
+            System.out.println(output + src.getFileName().toString() + " already exists in " + dest.toString());
+        } catch (IOException e){
             e.printStackTrace();
         }
         return false;

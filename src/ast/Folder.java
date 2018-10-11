@@ -16,6 +16,8 @@ public class Folder extends FileSystemElement{
         path = tokenizer.getNext();
     }
 
+
+
     @Override
     public Path evaluate() throws FileSystemNotSupportedException, FileNotFoundException, UnsupportedEncodingException {
         return FileSystemController.getInstance().getDirectoryPath(path);
