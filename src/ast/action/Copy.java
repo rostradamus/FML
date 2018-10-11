@@ -4,6 +4,7 @@ import ast.FileSystemElement;
 import ast.Folder;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
+import libs.SymbolTable;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -15,17 +16,14 @@ public class Copy extends Action{
     @Override
     public void parse() {
         tokenizer.getAndCheckNext("copy");
-        if (tokenizer.checkToken("get")) {
-            //TODO: later when we finish SET action
-        } else {
-            src = new FileSystemElement();
-            src.parse();
-            tokenizer.getAndCheckNext("to");
-            dst = new Folder();
-            dst.parse();
-        }
 
+        src = new FileSystemElement();
+        src.parse();
 
+        tokenizer.getAndCheckNext("to");
+
+        dst = new Folder();
+        dst.parse();
     }
 
     @Override

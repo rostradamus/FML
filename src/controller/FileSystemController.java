@@ -1,6 +1,7 @@
 package controller;
 
 import controller.exception.FileSystemNotSupportedException;
+import libs.SymbolTable;
 
 import java.awt.*;
 import java.io.File;
@@ -85,11 +86,16 @@ public class FileSystemController {
         }
         return false;
     }
+
     public boolean deleteHelper(File file) throws IOException{
-            if (!file.isDirectory() && file.exists()) return file.delete();
+        if(!file.isDirectory()){
+            updateSymbolTable(file.toPath(), null);
+            return file.delete();
+          }
             for (File f : file.listFiles()) {
                 deleteHelper(f);
             }
+            updateSymbolTable(file.toPath(), null);
             return file.delete();
     }
 
@@ -114,6 +120,7 @@ public class FileSystemController {
             Path extendedDst = this.extendDirectoryPath(src, dst);
             Files.move(src, extendedDst);
             System.out.println("moved " + src.toString() + " to " + extendedDst.toString());
+            updateSymbolTable(src, extendedDst);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -139,6 +146,7 @@ public class FileSystemController {
         } catch(FileAlreadyExistsException ex ) {
             System.out.println(output + src.getFileName().toString() + " already exists in " + dest.toString());
         } catch (IOException e){
+
             e.printStackTrace();
         }
         return false;
@@ -146,11 +154,13 @@ public class FileSystemController {
 
     public boolean rename(Path src, String rename) {
         File file = new File(src.toString());
-        File rfile = new File(src.getParent() + rename);
-        return file.renameTo(rfile);
+        String newPath = src.getParent() + "/" + rename;
+        File renamedFile = new File(newPath);
+        updateSymbolTable(src, Paths.get(newPath));
+        System.out.println("File " + src.getFileName().toString() + " renamed to " +renamedFile.getPath());
 
-        //src.getFileName().resolve(src.getParent() + rename);
-        //return true;
+        return file.renameTo(renamedFile);
+
     }
 
     // TODO: Below methods are POC codes
@@ -201,5 +211,23 @@ public class FileSystemController {
         String[] srcPath = src.toString().split("/");
         Path pp = Paths.get(dst.toString(), srcPath[srcPath.length - 1]);
         return pp;
+    }
+
+
+    /**
+     *
+     * @param src
+     * @param newPath if it is null it will delete src mapping from symbol table.
+     */
+    private void updateSymbolTable(Path src, Path newPath) {
+        if (newPath == null) {
+            SymbolTable.getInstance().getTable().entrySet().removeIf(entry -> entry.getValue().equals(src));
+        }
+
+        SymbolTable.getInstance().getTable().forEach(((key, value) -> {
+            if (value.equals(src)) {
+                SymbolTable.getInstance().getTable().put(key, newPath);
+            }
+        }));
     }
 }

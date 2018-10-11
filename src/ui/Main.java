@@ -14,7 +14,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        List<String> literals = Arrays.asList("show", "create", "move", "find", "file", "copy", "folder", "in", "to", "delete");
+        List<String> literals = Arrays.asList("show", "create", "move", "find", "file", "rename", "copy", "folder", "in",
+                "to", "delete", "set", "as", "get");
         if ((args.length != 0)  && (args[0].equals("cli"))) {
             launchApp(literals);
             return;

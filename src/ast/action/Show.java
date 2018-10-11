@@ -7,6 +7,7 @@ import ast.Statement;
 import ast.exception.ASTNodeException;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
+import libs.SymbolTable;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;

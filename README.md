@@ -7,4 +7,3 @@ move (file hello.txt in (folder /dir/temp)) to (folder /dir)
 copy (folder /dir/temp) to (folder /dir)
 copy (aias /dir/temp) to (folder /dir)
 find (String) from (folder /dir)
-

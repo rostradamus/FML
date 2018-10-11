@@ -4,6 +4,7 @@ import ast.FileSystemElement;
 import ast.Folder;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
+import libs.SymbolTable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,16 +17,13 @@ public class Move extends Action{
     @Override
     public void parse() {
         tokenizer.getAndCheckNext("move");
-        if (tokenizer.checkToken("get")) {
-            //TODO: later when we finish SET action
-        } else {
-            src = new FileSystemElement();
-            src.parse();
-            tokenizer.getAndCheckNext("to");
-            dst = new Folder();
-            dst.parse();
-        }
+        src = new FileSystemElement();
+        src.parse();
 
+        tokenizer.getAndCheckNext("to");
+
+        dst = new FileSystemElement();
+        dst.parse();
     }
 
     @Override

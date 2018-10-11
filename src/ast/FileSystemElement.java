@@ -14,6 +14,10 @@ public class FileSystemElement extends Statement{
             element = new File();
         } else if (tokenizer.checkToken("folder")) {
             element = new Folder();
+        } else if (tokenizer.checkToken("get")) {
+            element = new Alias();
+        } else {
+            System.out.println("FileElement parse: did not run into given literals");
         }
         element.parse();
     }
