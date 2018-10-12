@@ -1,11 +1,10 @@
-package ast;
+package ast.entity;
 
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
+import libs.exception.TokenizerException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
 
 public class NewFile extends NewFileSystemElement {
@@ -13,7 +12,7 @@ public class NewFile extends NewFileSystemElement {
     Folder dir;
 
     @Override
-    public void parse() {
+    public void parse() throws TokenizerException {
         tokenizer.getAndCheckNext("file");
         name = tokenizer.getNext();
         tokenizer.getAndCheckNext("in");

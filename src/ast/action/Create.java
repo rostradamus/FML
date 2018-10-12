@@ -1,21 +1,18 @@
 package ast.action;
 
-import ast.FileSystemElement;
-import ast.Folder;
-import ast.NewFileSystemElement;
+import ast.entity.NewFileSystemElement;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
+import libs.exception.TokenizerException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 public class Create extends Action{
     NewFileSystemElement src;
     NewFileSystemElement dst;
 
     @Override
-    public void parse() {
+    public void parse() throws TokenizerException {
         tokenizer.getAndCheckNext("create");
         src = new NewFileSystemElement();
         src.parse();

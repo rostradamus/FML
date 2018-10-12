@@ -1,20 +1,22 @@
 package ast.action;
 
-import ast.FileSystemElement;
+import ast.entity.FileSystemElement;
+import ast.exception.ASTNodeException;
 import controller.exception.FileSystemNotSupportedException;
 import libs.SymbolTable;
+import libs.exception.TokenizerException;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 
 public class Set extends Action{
     private String name;
     private FileSystemElement element;
     @Override
-    public void parse() {
+    public void parse() throws TokenizerException, ASTNodeException {
         tokenizer.getAndCheckNext("set");
         name = tokenizer.getAndCheckUnreservedNext();
+
         tokenizer.getAndCheckNext("as");
         element = new FileSystemElement();
         element.parse();

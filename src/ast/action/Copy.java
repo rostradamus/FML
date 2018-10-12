@@ -1,10 +1,11 @@
 package ast.action;
 
-import ast.FileSystemElement;
-import ast.Folder;
+import ast.entity.FileSystemElement;
+import ast.entity.Folder;
+import ast.exception.ASTNodeException;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
-import libs.SymbolTable;
+import libs.exception.TokenizerException;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -14,7 +15,7 @@ public class Copy extends Action{
     FileSystemElement dst;
 
     @Override
-    public void parse() {
+    public void parse() throws TokenizerException, ASTNodeException {
         tokenizer.getAndCheckNext("copy");
 
         src = new FileSystemElement();

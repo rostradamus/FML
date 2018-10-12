@@ -1,21 +1,19 @@
 package ast.action;
 
-import ast.FileSystemElement;
-import ast.Folder;
+import ast.entity.FileSystemElement;
+import ast.exception.ASTNodeException;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
-import libs.SymbolTable;
+import libs.exception.TokenizerException;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Path;
 
 public class Move extends Action{
     FileSystemElement src;
     FileSystemElement dst;
     @Override
-    public void parse() {
+    public void parse() throws TokenizerException, ASTNodeException {
         tokenizer.getAndCheckNext("move");
         src = new FileSystemElement();
         src.parse();

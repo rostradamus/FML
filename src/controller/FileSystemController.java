@@ -2,6 +2,7 @@ package controller;
 
 import controller.exception.FileSystemNotSupportedException;
 import libs.SymbolTable;
+import ui.Main;
 
 import java.awt.*;
 import java.io.File;
@@ -10,8 +11,9 @@ import java.nio.file.*;
 import java.nio.file.attribute.FileAttribute;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.stream.Stream;
-
+import java.util.stream.StreamSupport;
 
 
 public class FileSystemController {
@@ -31,11 +33,20 @@ public class FileSystemController {
         return instance;
     }
 
+    public Path getCurrentPath() throws FileSystemNotSupportedException {
+        return getDirectoryPath(currPath);
+    }
+
+    public void setCurrPath(Path currPath) {
+        this.currPath = currPath.toString();
+    }
+
     public Path getFilePath(String name, Path dirPath) throws FileSystemNotSupportedException {
         Path filePath = Paths.get(dirPath.toString(), name);
         if (!filePath.toFile().isFile())
             throw new FileSystemNotSupportedException(name + " in " + dirPath.toString() + " is not a file");
-        System.out.println("Found a file: " + name + ", from " + dirPath.toString());
+        if (Main.isVerbose())
+            System.out.println("Found a file: " + name + ", from " + dirPath.toString());
         return filePath;
     }
 
@@ -45,11 +56,39 @@ public class FileSystemController {
         return fileToCreatePath;
     }
 
+    private Path handleAndGetSpecialPath(String path) throws FileSystemNotSupportedException {
+
+        List<String> pathElems = Arrays.asList(path.split("/"));
+        Stack<String> currPathElems = new Stack<>();
+        currPathElems.addAll(Arrays.asList(currPath.split("/")));
+
+        for(String elem : pathElems) {
+            if (elem.equals(".")) {
+                continue;
+            } else if (elem.equals("..")) {
+                currPathElems.pop();
+            } else if (elem.startsWith("...")) {
+                throw new FileSystemNotSupportedException("Can't resolve path: " + path);
+            } else {
+                currPathElems.push(elem);
+            }
+        }
+        String resolvedPath = String.join("/", new ArrayList<String>(currPathElems));
+        return Paths.get(resolvedPath);
+    }
+
     public Path getDirectoryPath(String path) throws FileSystemNotSupportedException {
-        Path dirPath = Paths.get(path);
+        Path dirPath;
+        if (!path.startsWith("/")) {
+            dirPath = handleAndGetSpecialPath(path);
+        } else {
+            dirPath = Paths.get(path);
+        }
+
         if (!dirPath.toFile().isDirectory())
             throw new FileSystemNotSupportedException(path + " is not a directory.");
-        System.out.println("Found a folder: " + path);
+        if (Main.isVerbose())
+            System.out.println("Found a folder: " + path);
         return dirPath;
     }
 

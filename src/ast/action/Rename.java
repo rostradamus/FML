@@ -1,10 +1,10 @@
 package ast.action;
 
-import ast.FileSystemElement;
-import ast.Folder;
+import ast.entity.FileSystemElement;
+import ast.exception.ASTNodeException;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
-import libs.SymbolTable;
+import libs.exception.TokenizerException;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -14,7 +14,7 @@ public class Rename extends Action {
     String rename;
 
     @Override
-    public void parse() {
+    public void parse() throws TokenizerException, ASTNodeException {
         tokenizer.getAndCheckNext("rename");
         src = new FileSystemElement();
         src.parse();
