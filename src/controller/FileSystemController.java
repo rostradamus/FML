@@ -4,16 +4,13 @@ import controller.exception.FileSystemNotSupportedException;
 import libs.SymbolTable;
 import ui.Main;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.nio.file.attribute.FileAttribute;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 
 public class FileSystemController {
@@ -24,7 +21,7 @@ public class FileSystemController {
 
     private FileSystemController() {
         this.currPath = System.getProperty("user.home");
-        this.depthOption = 5;
+        this.depthOption = DEFAULT_DEPTH_OPTION;
     }
 
     public static FileSystemController getInstance() {
@@ -98,15 +95,14 @@ public class FileSystemController {
         this.depthOption = customDepth;
     }
 
-
-    public boolean create(Path src) throws FileAlreadyExistsException{
-        if (Files.exists(src)) {
+    public boolean create(Path target, String fileType) {
+        if (Files.exists(target)) {
             System.out.println("File not created because some file with the same name already exists!");
             return false;
         }
         try {
-            Files.createFile(src);
-            System.out.println(src.getFileName() + " created to " + src.getParent().toString());
+            Path result = fileType.equals("file") ? Files.createFile(target) : Files.createDirectory(target);
+            System.out.println(fileType + ": " + target.getFileName() + " created to " + target.getParent());
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,21 +134,24 @@ public class FileSystemController {
             return file.delete();
     }
 
-    public boolean find(String name) throws FileSystemNotSupportedException {
-        return find(name, currPath);
+    public boolean find(String name, Path from) throws FileSystemNotSupportedException {
+        System.out.println("=============== Find files/dirs with name containing: " + name + " ===============");
+        findFiles(name, from)
+                .map(Path::toFile)
+                .sorted((File file1, File file2) -> {
+                    if ((file1.isDirectory() && file2.isDirectory())
+                            || (file1.isFile() && file2.isFile())) {
+                        return file1.getPath().compareTo(file2.toString());
+                    } else {
+                        return file1.isDirectory() ? -1 : 1;
+                    }
+                })
+                .forEach((File file) -> printFileInfoLine(file, false));
+        System.out.println("=============== End of List ===============");
+        return true;
     }
 
-    public boolean find(String name, String path) throws FileSystemNotSupportedException {
-        Path start = Paths.get(path);
-        boolean isPathFile = start.toFile().isFile();
-        if (isPathFile) {
-            findFiles(name, start).forEach(System.out::println);
-        } else {
-            find(name);
-        }
 
-        return false;
-    }
 
     public boolean move(Path src, Path dst) {
         try {
@@ -206,13 +205,13 @@ public class FileSystemController {
     public void show(Path path) throws FileSystemNotSupportedException {
         boolean isPathFile = path.toFile().isFile();
         if (isPathFile) {
-            getFileContent(path);
+            printFileContent(path);
         } else {
-            getFileList(path);
+            printFileList(path);
         }
     }
 
-    private void getFileContent(Path src) throws FileSystemNotSupportedException {
+    private void printFileContent(Path src) throws FileSystemNotSupportedException {
         System.out.println("=============== Show file content for " + src.toString() + " ===============");
         List<String> lines;
         try {
@@ -224,21 +223,33 @@ public class FileSystemController {
         System.out.println("=============== End of file content for ===============");
     }
 
-    private void getFileList(Path src) throws FileSystemNotSupportedException {
-        System.out.println("=============== Show file list for " + src.toString() + " ===============");
+    private void printFileList(Path src) {
+        System.out.println("=============== Show file list for directory: " + src.toString() + " ===============");
         File[] files = src.toFile().listFiles();
-        Arrays.asList(files).forEach((file -> {
-            System.out.println(file.getName());
-        }));
-        System.out.println("=============== End of file list for ===============");
+        if (files == null) {
+            System.out.println("No file found in the directory");
+            return;
+        }
+        System.out.println("FileType             Size                  name");
+        Stream.of(files)
+                .sorted((File file1, File file2) -> {
+                    if ((file1.isDirectory() && file2.isDirectory())
+                        || (file1.isFile() && file2.isFile())) {
+                        return file1.getPath().compareTo(file2.toString());
+                    } else {
+                        return file1.isDirectory() ? -1 : 1;
+                    }
+                })
+                .forEach((File file) -> printFileInfoLine(file, true));
+        System.out.println("=============== End of list ===============");
     }
 
     private Stream<Path> findFiles(String name, Path start) throws FileSystemNotSupportedException {
         Stream<Path> stream;
         try {
-            stream = Files.find(start,5, ((path, basicFileAttributes) -> {
+            stream = Files.find(start,depthOption, ((path, basicFileAttributes) -> {
                 File file = path.toFile();
-                return !file.isDirectory() && file.getName().contains(name);
+                return file.getName().contains(name);
             }));
         } catch (IOException e) {
             throw new FileSystemNotSupportedException(e.getMessage());
@@ -248,10 +259,24 @@ public class FileSystemController {
 
     private Path extendDirectoryPath(Path src, Path dst) {
         String[] srcPath = src.toString().split("/");
-        Path pp = Paths.get(dst.toString(), srcPath[srcPath.length - 1]);
-        return pp;
+        return Paths.get(dst.toString(), srcPath[srcPath.length - 1]);
     }
 
+    private void printFileInfoLine(File file, boolean isOnlyFileName) {
+        String fileType = file.isFile() ? " <File> " : "<Folder>";
+        int length = 15;
+        StringBuilder sb = new StringBuilder(length);
+        DecimalFormat df = new DecimalFormat("#.##");
+        String fileSize = Double.valueOf(df.format((double) file.length() / 1024)) + " kb";
+        int padding = file.isFile() ? length - fileSize.length() : length;
+        for (int i = 1; i < padding; i++) {
+            sb.append(" ");
+        }
+        if (file.isFile())
+            sb.append(fileSize);
+        String filePath = isOnlyFileName ?  file.getName() : file.getPath();
+        System.out.println(fileType + "   " + sb.toString() + "         " + filePath);
+    }
 
     /**
      *

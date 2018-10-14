@@ -23,7 +23,7 @@ public class Main {
 
     public static void main(String[] args) {
         List<String> literals = Arrays.asList("show", "create", "move", "find", "file", "rename", "copy", "folder", "in",
-                "to", "delete", "set", "as", "get", "whereami", "take", "me");
+                "to", "from", "delete", "set", "as", "get", "whereami", "take", "me");
         if ((args.length >= 2) && (args[1].equals("-v"))) {
             System.out.println("=============== Running Application in verbose mode ===============");
             isVerbose = true;
