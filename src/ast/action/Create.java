@@ -23,6 +23,7 @@ public class Create extends Action {
             throw new ASTNodeException("Create parse: did not run into proper file type: " + fileType);
         }
 
+
         name = tokenizer.getNext();
         tokenizer.getAndCheckNext("in");
         dst = new FileSystemElement();

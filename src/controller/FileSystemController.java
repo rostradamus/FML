@@ -4,6 +4,7 @@ import controller.exception.FileSystemNotSupportedException;
 import libs.SymbolTable;
 import ui.Main;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
@@ -151,6 +152,20 @@ public class FileSystemController {
         return true;
     }
 
+    public void open(Path src) throws FileSystemNotSupportedException {
+        if (!Desktop.isDesktopSupported()) {
+            throw new FileSystemNotSupportedException("Desktop is not supported");
+        }
+
+        Desktop desktop = Desktop.getDesktop();
+
+        try {
+            desktop.open(src.toFile());
+        } catch (IOException e) {
+            throw new FileSystemNotSupportedException(e.getMessage());
+        }
+
+    }
 
 
     public boolean move(Path src, Path dst) {

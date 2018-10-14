@@ -49,6 +49,8 @@ public class Program extends Node {
                 s = new ChangeDirectory();
             } else if (tokenizer.checkToken("whereami")) {
                 s = new WhereAmI();
+            } else if (tokenizer.checkToken("open")) {
+                s = new Open();
             } else {
                 throw new ASTNodeException("Program parse: did not run into given literals");
             }
