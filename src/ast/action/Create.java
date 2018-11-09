@@ -1,29 +1,40 @@
 package ast.action;
 
-import ast.FileSystemElement;
-import ast.Folder;
-import ast.NewFileSystemElement;
+import ast.entity.FileSystemElement;
+import ast.exception.ASTNodeException;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
+import libs.exception.TokenizerException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
-public class Create extends Action{
-    NewFileSystemElement src;
-    NewFileSystemElement dst;
+public class Create extends Action {
+    String fileType;
+    String name;
+    FileSystemElement dst;
 
     @Override
-    public void parse() {
+    public void parse() throws TokenizerException, ASTNodeException {
         tokenizer.getAndCheckNext("create");
-        src = new NewFileSystemElement();
-        src.parse();
+
+        fileType = tokenizer.getNext();
+
+        if (!fileType.equals("file") && !fileType.equals("folder")) {
+            throw new ASTNodeException("Create parse: did not run into proper file type: " + fileType);
+        }
+
+
+        name = tokenizer.getNext();
+        tokenizer.getAndCheckNext("in");
+        dst = new FileSystemElement();
+        dst.parse();
     }
 
     @Override
     public Object evaluate() throws IOException, FileSystemNotSupportedException {
-        FileSystemController.getInstance().create(src.evaluate());
+
+        FileSystemController.getInstance().create(dst.evaluate().resolve(name),
+                fileType);
         return null;
     }
 }

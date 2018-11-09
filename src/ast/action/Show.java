@@ -1,12 +1,10 @@
 package ast.action;
 
-import ast.File;
-import ast.FileSystemElement;
-import ast.Folder;
-import ast.Statement;
+import ast.entity.FileSystemElement;
 import ast.exception.ASTNodeException;
 import controller.FileSystemController;
 import controller.exception.FileSystemNotSupportedException;
+import libs.exception.TokenizerException;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -14,7 +12,7 @@ import java.io.UnsupportedEncodingException;
 public class Show extends Action {
     FileSystemElement src;
     @Override
-    public void parse() throws ASTNodeException {
+    public void parse() throws TokenizerException, ASTNodeException {
         tokenizer.getAndCheckNext("show");
         src = new FileSystemElement();
         src.parse();

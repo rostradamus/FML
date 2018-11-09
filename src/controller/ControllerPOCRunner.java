@@ -19,11 +19,6 @@ public class ControllerPOCRunner {
             src = Paths.get(home,"hello.txt");
             fileSystemController.show(src);
 
-            printDescription("find", true);
-            fileSystemController.find("random");
-
-            printDescription("find", false);
-            fileSystemController.find("random", home + "/" + "temp");
         } catch (FileSystemNotSupportedException e) {
             System.out.println(e.getMessage());
         }
